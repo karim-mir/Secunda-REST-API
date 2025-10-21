@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "secunda rest api"
+version = "0.1.0"
+description = ""
+authors = ["NazKar@Nazir <karimov.nazir00@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flake8 = "^7.3.0"
+isort = "^7.0.0"
+black = "^25.9.0"
+django = "^5.2.7"
+dotenv = "^0.9.9"
+psycopg2 = "^2.9.11"
+djangorestframework = "^3.16.1"
+django-filter = "^25.2"
+python-dotenv = "^1.1.1"
+coreapi = "^2.3.3"
+drf-yasg = "^1.21.11"
+faker = "^37.11.0"
+coverage = "^7.11.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
