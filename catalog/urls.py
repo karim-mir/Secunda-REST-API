@@ -8,5 +8,5 @@ router.register(r'buildings', views.BuildingViewSet)
 router.register(r'activities', views.ActivityViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

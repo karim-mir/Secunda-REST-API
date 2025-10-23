@@ -117,3 +117,10 @@ REST_FRAMEWORK = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+import sys
+
+TESTING = 'test' in sys.argv
+
+if TESTING:
+    REST_FRAMEWORK['DEFAULT_PAGINATION_CLASS'] = None

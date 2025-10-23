@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:13
     environment:
-      - POSTGRES_DB=catalog_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -17,21 +15,19 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=False
-      - SECRET_KEY=your-secret-key-here-change-this-in-production
-      - DB_NAME=catalog_db
-      - DB_USER=user
-      - DB_PASSWORD=password
-      - DB_HOST=db
-      - DB_PORT=5432
+      DEBUG: "False"
+      SECRET_KEY: ${SECRET_KEY}
+      API_KEY: ${API_KEY}
+      DB_ENGINE: ${DB_ENGINE}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     depends_on:
       - db
     volumes:
       - .:/app
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py seed_data &&
-             python manage.py runserver 0.0.0.0:8000"
 
 volumes:
   postgres_data:

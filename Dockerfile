@@ -1,35 +1,26 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Устанавливаем системные зависимости для PostgreSQL
 RUN apt-get update && apt-get install -y \
     gcc \
-    postgresql-dev \
+    g++ \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем рабочую директорию
 WORKDIR /app
 
 # Копируем зависимости
-COPY pyproject.toml poetry.lock* ./
+COPY requirements.txt .
 
-# Устанавливаем Poetry и зависимости
-RUN pip install poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install --no-dev --no-interaction --no-ansi
+# Устанавливаем зависимости
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем код проекта
 COPY . .
 
-# Создаем миграции и применяем их
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-
-# Создаем суперпользователя для админки
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin123') if not User.objects.filter(username='admin').exists() else None" | python manage.py shell
-
-# Создаем тестовые данные
-RUN python manage.py seed_data
+# Собираем статику
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py seed_data && python manage.py runserver 0.0.0.0:8000"]

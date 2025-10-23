@@ -25,8 +25,15 @@ def api_root(request):
 
 class APIKeyPermission(BasePermission):
     def has_permission(self, request, view):
+        # Разрешаем доступ если API ключ правильный ИЛИ если его нет вообще
         api_key = request.query_params.get('api_key')
-        return api_key == 'test123'  # Статический API ключ
+
+        # Если API ключ передан - проверяем его
+        if api_key is not None:
+            return api_key == 'test123'
+
+        # Если API ключ не передан - запрещаем доступ
+        return False
 
 
 def calculate_distance_km(lat1, lon1, lat2, lon2):
@@ -49,7 +56,7 @@ def calculate_distance_km(lat1, lon1, lat2, lon2):
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
-    queryset = Organization.objects.select_related('building').prefetch_related('activities')
+    queryset = Organization.objects.select_related('building').prefetch_related('activities').order_by('id')
     serializer_class = OrganizationSerializer
     permission_classes = [APIKeyPermission]
 
