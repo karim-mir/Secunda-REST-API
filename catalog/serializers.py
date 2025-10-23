@@ -9,16 +9,15 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'parent', 'level', 'children']
 
     def get_children(self, obj):
-        if obj.level < 3:
+        """Рекурсивно получаем детей, но только до 3 уровня"""
+        if obj.level < 3:  # Ограничение вложенности как в ТЗ
             return ActivitySerializer(obj.children.all(), many=True).data
         return []
-
 
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Building
-        fields = ['id', 'adress', 'latitude', 'longitude']
-
+        fields = ['id', 'address', 'latitude', 'longitude']
 
 class OrganizationSerializer(serializers.ModelSerializer):
     building = BuildingSerializer(read_only=True)
@@ -26,4 +25,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organization
-        fields = ['id', 'name', 'phone_number', 'building', 'activities']
+        fields = ['id', 'name', 'phone_numbers', 'building', 'activities']

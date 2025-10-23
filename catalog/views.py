@@ -9,6 +9,20 @@ from .models import Organization, Building, Activity
 from .serializers import *
 
 
+@api_view(['GET'])
+def api_root(request):
+    """Корневой URL с информацией об API"""
+    return Response({
+        'message': 'Organization Catalog API',
+        'endpoints': {
+            'organizations': '/api/organizations/',
+            'buildings': '/api/buildings/',
+            'activities': '/api/activities/',
+            'documentation': '/api/'
+        }
+    })
+
+
 class APIKeyPermission(BasePermission):
     def has_permission(self, request, view):
         api_key = request.query_params.get('api_key')
