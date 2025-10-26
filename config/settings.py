@@ -1,5 +1,7 @@
-from pathlib import Path
 import os
+import sys
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -103,8 +105,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
@@ -118,9 +119,7 @@ REST_FRAMEWORK = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-import sys
-
-TESTING = 'test' in sys.argv
+TESTING = "test" in sys.argv
 
 if TESTING:
-    REST_FRAMEWORK['DEFAULT_PAGINATION_CLASS'] = None
+    REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = None

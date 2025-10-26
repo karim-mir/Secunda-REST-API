@@ -1,12 +1,14 @@
 from rest_framework import serializers
-from .models import Organization, Building, Activity
+
+from .models import Activity, Building, Organization
+
 
 class ActivitySerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField()
 
     class Meta:
         model = Activity
-        fields = ['id', 'name', 'parent', 'level', 'children']
+        fields = ["id", "name", "parent", "level", "children"]
 
     def get_children(self, obj):
         """Рекурсивно получаем детей, но только до 3 уровня"""
@@ -14,10 +16,12 @@ class ActivitySerializer(serializers.ModelSerializer):
             return ActivitySerializer(obj.children.all(), many=True).data
         return []
 
+
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Building
-        fields = ['id', 'address', 'latitude', 'longitude']
+        fields = ["id", "address", "latitude", "longitude"]
+
 
 class OrganizationSerializer(serializers.ModelSerializer):
     building = BuildingSerializer(read_only=True)
@@ -25,4 +29,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organization
-        fields = ['id', 'name', 'phone_numbers', 'building', 'activities']
+        fields = ["id", "name", "phone_numbers", "building", "activities"]
